@@ -10,6 +10,7 @@ from typing import AsyncGenerator
 
 import pytest
 from mcp import StdioServerParameters, stdio_client, ClientSession
+from mcp.types import TextContent
 from youtube_transcript_api import YouTubeTranscriptApi
 
 params = StdioServerParameters(command="uv", args=["run", "mcp-youtube-transcript"])
@@ -46,6 +47,7 @@ async def test_get_transcript(mcp_client_session: ClientSession) -> None:
         "get_transcript",
         arguments={"url": f"https//www.youtube.com/watch?v={video_id}"},
     )
+    assert isinstance(res.content[0], TextContent)
     assert res.content[0].text == expect
     assert not res.isError
 
@@ -62,6 +64,7 @@ async def test_get_transcript_with_language(mcp_client_session: ClientSession) -
         "get_transcript",
         arguments={"url": f"https//www.youtube.com/watch?v={video_id}", "lang": "ja"},
     )
+    assert isinstance(res.content[0], TextContent)
     assert res.content[0].text == expect
     assert not res.isError
 
@@ -83,6 +86,7 @@ async def test_get_transcript_fallback_language(
             "lang": "unknown",
         },
     )
+    assert isinstance(res.content[0], TextContent)
     assert res.content[0].text == expect
     assert not res.isError
 

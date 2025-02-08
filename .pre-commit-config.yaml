@@ -25,6 +25,8 @@ repos:
     rev: v1.15.0
     hooks:
       - id: mypy
+        args: []
+        additional_dependencies: ["mcp>=1.2.1", "pytest>=8.3.4"]
   - repo: local
     hooks:
       - id: pytest
