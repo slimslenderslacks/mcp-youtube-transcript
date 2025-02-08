@@ -12,10 +12,7 @@ import pytest
 from mcp import StdioServerParameters, stdio_client, ClientSession
 from youtube_transcript_api import YouTubeTranscriptApi
 
-params = StdioServerParameters(
-    command="uv",
-    args=["run", "mcp-youtube-transcript"]
-)
+params = StdioServerParameters(command="uv", args=["run", "mcp-youtube-transcript"])
 
 
 @pytest.fixture(scope="module")
@@ -41,10 +38,14 @@ async def test_list_tools(mcp_client_session: ClientSession) -> None:
 async def test_get_transcript(mcp_client_session: ClientSession) -> None:
     video_id = "LPZh9BOjkQs"
 
-    expect = "\n".join((item["text"] for item in YouTubeTranscriptApi.get_transcript(video_id)))
+    expect = "\n".join(
+        (item["text"] for item in YouTubeTranscriptApi.get_transcript(video_id))
+    )
 
-    res = await mcp_client_session.call_tool("get_transcript",
-                                             arguments={"url": f"https//www.youtube.com/watch?v={video_id}"})
+    res = await mcp_client_session.call_tool(
+        "get_transcript",
+        arguments={"url": f"https//www.youtube.com/watch?v={video_id}"},
+    )
     assert res.content[0].text == expect
     assert not res.isError
 
@@ -53,36 +54,50 @@ async def test_get_transcript(mcp_client_session: ClientSession) -> None:
 async def test_get_transcript_with_language(mcp_client_session: ClientSession) -> None:
     video_id = "WjAXZkQSE2U"
 
-    expect = "\n".join((item["text"] for item in YouTubeTranscriptApi.get_transcript(video_id, ["ja"])))
+    expect = "\n".join(
+        (item["text"] for item in YouTubeTranscriptApi.get_transcript(video_id, ["ja"]))
+    )
 
-    res = await mcp_client_session.call_tool("get_transcript",
-                                             arguments={"url": f"https//www.youtube.com/watch?v={video_id}",
-                                                        "lang": "ja"})
+    res = await mcp_client_session.call_tool(
+        "get_transcript",
+        arguments={"url": f"https//www.youtube.com/watch?v={video_id}", "lang": "ja"},
+    )
     assert res.content[0].text == expect
     assert not res.isError
 
 
 @pytest.mark.anyio
-async def test_get_transcript_fallback_language(mcp_client_session: ClientSession) -> None:
+async def test_get_transcript_fallback_language(
+    mcp_client_session: ClientSession,
+) -> None:
     video_id = "LPZh9BOjkQs"
 
-    expect = "\n".join((item["text"] for item in YouTubeTranscriptApi.get_transcript(video_id)))
+    expect = "\n".join(
+        (item["text"] for item in YouTubeTranscriptApi.get_transcript(video_id))
+    )
 
-    res = await mcp_client_session.call_tool("get_transcript",
-                                             arguments={"url": f"https//www.youtube.com/watch?v={video_id}",
-                                                        "lang": "unknown"})
+    res = await mcp_client_session.call_tool(
+        "get_transcript",
+        arguments={
+            "url": f"https//www.youtube.com/watch?v={video_id}",
+            "lang": "unknown",
+        },
+    )
     assert res.content[0].text == expect
     assert not res.isError
 
 
 @pytest.mark.anyio
 async def test_get_transcript_invalid_url(mcp_client_session: ClientSession) -> None:
-    res = await mcp_client_session.call_tool("get_transcript",
-                                             arguments={"url": "https//www.youtube.com/watch?vv=abcdefg"})
+    res = await mcp_client_session.call_tool(
+        "get_transcript", arguments={"url": "https//www.youtube.com/watch?vv=abcdefg"}
+    )
     assert res.isError
 
 
 @pytest.mark.anyio
 async def test_get_transcript_not_found(mcp_client_session: ClientSession) -> None:
-    res = await mcp_client_session.call_tool("get_transcript", arguments={"url": "https//www.youtube.com/watch?v=a"})
+    res = await mcp_client_session.call_tool(
+        "get_transcript", arguments={"url": "https//www.youtube.com/watch?v=a"}
+    )
     assert res.isError

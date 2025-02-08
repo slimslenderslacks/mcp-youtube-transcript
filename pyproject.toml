@@ -1,26 +1,34 @@
+[build-system]
+build-backend = "hatchling.build"
+
+requires = [ "hatchling" ]
+
 [project]
 name = "mcp-youtube-transcript"
 version = "0.1.0"
 description = "MCP server retrieving transcripts of YouTube videos"
 readme = "README.md"
 authors = [
-    { name = "Junpei Kawamoto", email = "kawamoto.junpei@gmail.com" }
+  { name = "Junpei Kawamoto", email = "kawamoto.junpei@gmail.com" },
 ]
 requires-python = ">=3.10"
+classifiers = [
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+]
 dependencies = [
-    "mcp>=1.2.1",
-    "youtube-transcript-api>=0.6.3",
+  "mcp>=1.2.1",
+  "youtube-transcript-api>=0.6.3",
 ]
 
-[project.scripts]
-mcp-youtube-transcript = "mcp_youtube_transcript:main"
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+scripts.mcp-youtube-transcript = "mcp_youtube_transcript:main"
 
 [dependency-groups]
 dev = [
-    "pytest>=8.3.4",
+  "pre-commit>=4.1",
+  "pre-commit-uv>=4.1.4",
+  "pytest>=8.3.4",
 ]
-

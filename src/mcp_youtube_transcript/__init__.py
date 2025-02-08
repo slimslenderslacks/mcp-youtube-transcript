@@ -44,4 +44,4 @@ def main() -> None:
     logger.info("closed Youtube Transcript MCP server")
 
 
-__all__: Final[str] = ["main"]
+__all__: Final = ["main"]
