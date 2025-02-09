@@ -1,10 +1,19 @@
 # Youtube Transcript MCP Server
 [![Python Application](https://github.com/jkawamoto/mcp-youtube-transcript/actions/workflows/python-app.yaml/badge.svg)](https://github.com/jkawamoto/mcp-youtube-transcript/actions/workflows/python-app.yaml)
 [![GitHub License](https://img.shields.io/github/license/jkawamoto/mcp-youtube-transcript)](https://github.com/jkawamoto/mcp-youtube-transcript/blob/main/LICENSE)
+[![smithery badge](https://smithery.ai/badge/@jkawamoto/mcp-youtube-transcript)](https://smithery.ai/server/@jkawamoto/mcp-youtube-transcript)
 
 This MCP server retrieves transcripts for given YouTube video URLs.
 
 ## Installation
+
+### Installing via Smithery
+
+To install Youtube Transcript for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@jkawamoto/mcp-youtube-transcript):
+
+```bash
+npx -y @smithery/cli install @jkawamoto/mcp-youtube-transcript --client claude
+```
 
 ### For Goose CLI
 To enable the YouTube Transcript extension in Goose CLI,
