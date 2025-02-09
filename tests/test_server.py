@@ -5,7 +5,7 @@
 #  This software is released under the MIT License.
 #
 #  http://opensource.org/licenses/mit-license.php
-
+import os
 from typing import AsyncGenerator
 
 import pytest
@@ -35,6 +35,7 @@ async def test_list_tools(mcp_client_session: ClientSession) -> None:
     assert any(tool.name == "get_transcript" for tool in res.tools)
 
 
+@pytest.mark.skipif(os.getenv("CI") == "true", reason="Skipping this test on CI")
 @pytest.mark.anyio
 async def test_get_transcript(mcp_client_session: ClientSession) -> None:
     video_id = "LPZh9BOjkQs"
@@ -52,6 +53,7 @@ async def test_get_transcript(mcp_client_session: ClientSession) -> None:
     assert not res.isError
 
 
+@pytest.mark.skipif(os.getenv("CI") == "true", reason="Skipping this test on CI")
 @pytest.mark.anyio
 async def test_get_transcript_with_language(mcp_client_session: ClientSession) -> None:
     video_id = "WjAXZkQSE2U"
@@ -69,6 +71,7 @@ async def test_get_transcript_with_language(mcp_client_session: ClientSession) -
     assert not res.isError
 
 
+@pytest.mark.skipif(os.getenv("CI") == "true", reason="Skipping this test on CI")
 @pytest.mark.anyio
 async def test_get_transcript_fallback_language(
     mcp_client_session: ClientSession,
@@ -99,6 +102,7 @@ async def test_get_transcript_invalid_url(mcp_client_session: ClientSession) -> 
     assert res.isError
 
 
+@pytest.mark.skipif(os.getenv("CI") == "true", reason="Skipping this test on CI")
 @pytest.mark.anyio
 async def test_get_transcript_not_found(mcp_client_session: ClientSession) -> None:
     res = await mcp_client_session.call_tool(
