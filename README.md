@@ -4,6 +4,8 @@
 
 This MCP server retrieves transcripts for given YouTube video URLs.
 
+<a href="https://glama.ai/mcp/servers/of3kwtmlqp"><img width="380" height="200" src="https://glama.ai/mcp/servers/of3kwtmlqp/badge" alt="YouTube Transcript Server MCP server" /></a>
+
 ## Installation
 
 ### For Goose CLI
