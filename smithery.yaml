@@ -6,7 +6,6 @@ startCommand:
     # JSON Schema defining the configuration options for the MCP.
     type: object
     properties: {}
-  commandFunction:
-    # A function that produces the CLI command to start the MCP on stdio.
-    |-
+  commandFunction: |-
     (config) => ({ command: 'mcp-youtube-transcript' })
+  # A function that produces the CLI command to start the MCP on stdio.
