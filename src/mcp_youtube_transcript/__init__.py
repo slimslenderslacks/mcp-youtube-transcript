@@ -12,6 +12,7 @@ from urllib.parse import urlparse, parse_qs
 
 from mcp.server import FastMCP
 from mcp.server.fastmcp.utilities import logging
+from pydantic import Field
 from youtube_transcript_api import YouTubeTranscriptApi
 
 logger: Final[Logger] = logging.get_logger(__name__)
@@ -20,7 +21,12 @@ mcp: Final[FastMCP] = FastMCP("Youtube Transcript")
 
 
 @mcp.tool()
-def get_transcript(url: str, lang: str = "en") -> str:
+def get_transcript(
+    url: str = Field(description="The URL of the YouTube video"),
+    lang: str = Field(
+        description="The preferred language for the transcript", default="en"
+    ),
+) -> str:
     """Retrieves the transcript of a YouTube video."""
     parsed_url = urlparse(url)
     query_params = parse_qs(parsed_url.query)

@@ -21,6 +21,7 @@ classifiers = [
 ]
 dependencies = [
   "mcp>=1.2.1",
+  "pydantic>=2.10.6",
   "youtube-transcript-api>=0.6.3",
 ]
 
