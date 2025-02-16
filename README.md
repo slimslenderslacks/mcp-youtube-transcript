@@ -9,14 +9,6 @@ This MCP server retrieves transcripts for given YouTube video URLs.
 
 ## Installation
 
-### Installing via Smithery
-
-To install Youtube Transcript for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@jkawamoto/mcp-youtube-transcript):
-
-```bash
-npx -y @smithery/cli install @jkawamoto/mcp-youtube-transcript --client claude
-```
-
 ### For Goose CLI
 To enable the YouTube Transcript extension in Goose CLI,
 edit the configuration file `~/.config/goose/config.yaml` to include the following entry:
@@ -43,6 +35,35 @@ Add a new extension with the following settings:
 For more details on configuring MCP servers in Goose Desktop,
 refer to the documentation:
 [Using Extensions - MCP Servers](https://block.github.io/goose/docs/getting-started/using-extensions#mcp-servers).
+
+### For Claude Desktop
+To configure this server for Claude Desktop, edit the `claude_desktop_config.json` file with the following entry under
+`mcpServers`:
+
+```json
+{
+  "mcpServers": {
+    "youtube-transcript": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/jkawamoto/mcp-youtube-transcript",
+        "mcp-youtube-transcript"
+      ]
+    }
+  }
+}
+```
+After editing, restart the application.
+For more information,
+see: [For Claude Desktop Users - Model Context Protocol](https://modelcontextprotocol.io/quickstart/user).
+
+### Installing via Smithery
+To install Youtube Transcript for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@jkawamoto/mcp-youtube-transcript):
+
+```bash
+npx -y @smithery/cli install @jkawamoto/mcp-youtube-transcript --client claude
+```
 
 ## License
 
