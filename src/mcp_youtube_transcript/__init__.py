@@ -23,9 +23,7 @@ mcp: Final[FastMCP] = FastMCP("Youtube Transcript")
 @mcp.tool()
 def get_transcript(
     url: str = Field(description="The URL of the YouTube video"),
-    lang: str = Field(
-        description="The preferred language for the transcript", default="en"
-    ),
+    lang: str = Field(description="The preferred language for the transcript", default="en"),
 ) -> str:
     """Retrieves the transcript of a YouTube video."""
     parsed_url = urlparse(url)

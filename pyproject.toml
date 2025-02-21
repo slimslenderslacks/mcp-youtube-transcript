@@ -9,32 +9,39 @@ version = "0.1.0"
 description = "MCP server retrieving transcripts of YouTube videos"
 readme = "README.md"
 authors = [
-  { name = "Junpei Kawamoto", email = "kawamoto.junpei@gmail.com" },
+    { name = "Junpei Kawamoto", email = "kawamoto.junpei@gmail.com" },
 ]
 requires-python = ">=3.10"
 classifiers = [
-  "Development Status :: 4 - Beta",
-  "License :: OSI Approved :: MIT License",
-  "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.10",
-  "Programming Language :: Python :: 3.11",
-  "Programming Language :: Python :: 3.12",
-  "Programming Language :: Python :: 3.13",
+    "Development Status :: 4 - Beta",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
 dependencies = [
-  "mcp>=1.2.1",
-  "pydantic>=2.10.6",
-  "youtube-transcript-api>=0.6.3",
+    "mcp>=1.2.1",
+    "pydantic>=2.10.6",
+    "youtube-transcript-api>=0.6.3",
 ]
 
 scripts.mcp-youtube-transcript = "mcp_youtube_transcript:main"
 
 [dependency-groups]
 dev = [
-  "pre-commit>=4.1",
-  "pre-commit-uv>=4.1.4",
-  "pytest>=8.3.4",
+    "pre-commit>=4.1",
+    "pre-commit-uv>=4.1.4",
+    "pytest>=8.3.4",
 ]
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+
+[tool.pyproject-fmt]
+indent = 4
 
 [tool.mypy]
 warn_return_any = true
@@ -43,6 +50,6 @@ disallow_untyped_defs = true
 
 [[tool.mypy.overrides]]
 module = [
-  "youtube_transcript_api",
+    "youtube_transcript_api",
 ]
 ignore_missing_imports = true
