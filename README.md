@@ -67,6 +67,16 @@ To install Youtube Transcript for Claude Desktop automatically via [Smithery](ht
 npx -y @smithery/cli install @jkawamoto/mcp-youtube-transcript --client claude
 ```
 
+## Tools
+This MCP server provides the following tools:
+
+### `get_transcript`
+Fetches the transcript of a specified YouTube video.
+
+#### Parameters
+- **url** *(string)*: The full URL of the YouTube video. This field is required.
+- **lang** *(string, optional)*: The desired language for the transcript. Defaults to `en` if not specified.
+
 ## License
 
 This application is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
