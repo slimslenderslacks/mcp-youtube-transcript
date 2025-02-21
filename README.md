@@ -1,6 +1,8 @@
 # Youtube Transcript MCP Server
 [![Python Application](https://github.com/jkawamoto/mcp-youtube-transcript/actions/workflows/python-app.yaml/badge.svg)](https://github.com/jkawamoto/mcp-youtube-transcript/actions/workflows/python-app.yaml)
 [![GitHub License](https://img.shields.io/github/license/jkawamoto/mcp-youtube-transcript)](https://github.com/jkawamoto/mcp-youtube-transcript/blob/main/LICENSE)
+[![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
+[![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 [![smithery badge](https://smithery.ai/badge/@jkawamoto/mcp-youtube-transcript)](https://smithery.ai/server/@jkawamoto/mcp-youtube-transcript)
 
 This MCP server retrieves transcripts for given YouTube video URLs.
@@ -64,6 +66,16 @@ To install Youtube Transcript for Claude Desktop automatically via [Smithery](ht
 ```bash
 npx -y @smithery/cli install @jkawamoto/mcp-youtube-transcript --client claude
 ```
+
+## Tools
+This MCP server provides the following tools:
+
+### `get_transcript`
+Fetches the transcript of a specified YouTube video.
+
+#### Parameters
+- **url** *(string)*: The full URL of the YouTube video. This field is required.
+- **lang** *(string, optional)*: The desired language for the transcript. Defaults to `en` if not specified.
 
 ## License
 
