@@ -10,6 +10,7 @@ from logging import Logger
 from typing import Final
 from urllib.parse import urlparse, parse_qs
 
+import click
 from mcp.server import FastMCP
 from mcp.server.fastmcp.utilities import logging
 from pydantic import Field
@@ -43,7 +44,10 @@ def get_transcript(
     return "\n".join((item.text for item in transcripts))
 
 
+@click.command()
+@click.version_option()
 def main() -> None:
+    """YouTube Transcript MCP server."""
     logger.info("starting Youtube Transcript MCP server")
     mcp.run()
     logger.info("closed Youtube Transcript MCP server")
