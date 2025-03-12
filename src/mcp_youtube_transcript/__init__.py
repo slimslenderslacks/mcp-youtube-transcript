@@ -18,6 +18,7 @@ from youtube_transcript_api import YouTubeTranscriptApi
 logger: Final[Logger] = logging.get_logger(__name__)
 
 mcp: Final[FastMCP] = FastMCP("Youtube Transcript")
+ytt_api: Final[YouTubeTranscriptApi] = YouTubeTranscriptApi()
 
 
 @mcp.tool()
@@ -37,9 +38,9 @@ def get_transcript(
         languages = ["en"]
     else:
         languages = [lang, "en"]
-    transcripts = YouTubeTranscriptApi.get_transcript(video_id, languages=languages)
+    transcripts = ytt_api.fetch(video_id, languages=languages)
 
-    return "\n".join((item["text"] for item in transcripts))
+    return "\n".join((item.text for item in transcripts))
 
 
 def main() -> None:

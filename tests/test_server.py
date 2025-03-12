@@ -40,7 +40,7 @@ async def test_list_tools(mcp_client_session: ClientSession) -> None:
 async def test_get_transcript(mcp_client_session: ClientSession) -> None:
     video_id = "LPZh9BOjkQs"
 
-    expect = "\n".join((item["text"] for item in YouTubeTranscriptApi.get_transcript(video_id)))
+    expect = "\n".join((item.text for item in YouTubeTranscriptApi().fetch(video_id)))
 
     res = await mcp_client_session.call_tool(
         "get_transcript",
@@ -56,7 +56,7 @@ async def test_get_transcript(mcp_client_session: ClientSession) -> None:
 async def test_get_transcript_with_language(mcp_client_session: ClientSession) -> None:
     video_id = "WjAXZkQSE2U"
 
-    expect = "\n".join((item["text"] for item in YouTubeTranscriptApi.get_transcript(video_id, ["ja"])))
+    expect = "\n".join((item.text for item in YouTubeTranscriptApi().fetch(video_id, ["ja"])))
 
     res = await mcp_client_session.call_tool(
         "get_transcript",
@@ -74,7 +74,7 @@ async def test_get_transcript_fallback_language(
 ) -> None:
     video_id = "LPZh9BOjkQs"
 
-    expect = "\n".join((item["text"] for item in YouTubeTranscriptApi.get_transcript(video_id)))
+    expect = "\n".join((item.text for item in YouTubeTranscriptApi().fetch(video_id)))
 
     res = await mcp_client_session.call_tool(
         "get_transcript",
