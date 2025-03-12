@@ -317,7 +317,7 @@ dev = [
 requires-dist = [
     { name = "mcp", specifier = ">=1.3" },
     { name = "pydantic", specifier = ">=2.10.6" },
-    { name = "youtube-transcript-api", specifier = ">=1" },
+    { name = "youtube-transcript-api", specifier = ">=1.0.1" },
 ]
 
 [package.metadata.requires-dev]
@@ -826,13 +826,13 @@ wheels = [
 
 [[package]]
 name = "youtube-transcript-api"
-version = "1.0.0"
+version = "1.0.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "defusedxml" },
     { name = "requests" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/42/90/5b0adc298ec4f595fe75b3424b643b9eee9c038d06139c7f6919cd1ac1a1/youtube_transcript_api-1.0.0.tar.gz", hash = "sha256:eba94e886e0f0256cf2b74d5d2c9f3c3ad24746941d580c3efc675b21286e43c", size = 1911036 }
+sdist = { url = "https://files.pythonhosted.org/packages/e6/2d/810b2b1d8cf401b257928f300415ec66933f82678ca27f273c2aedf42517/youtube_transcript_api-1.0.1.tar.gz", hash = "sha256:820977c8402e2e7f8ce86817e05044ddc8c5fe7085cb8058b9a21e14153a27ba", size = 1911393 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/cd/11/30507c773124090130c3a355cc06b2636bfc77feed38afe9f94a4acc9357/youtube_transcript_api-1.0.0-py3-none-any.whl", hash = "sha256:c5637baa4808f76f22d188679074ac2c2a525882ee5c47d2bf4564771b2475c7", size = 1929126 },
+    { url = "https://files.pythonhosted.org/packages/dc/83/52d6730ca49723116ffcfe398854b6ef1ecc780e09203f6ba4b203fde15e/youtube_transcript_api-1.0.1-py3-none-any.whl", hash = "sha256:66b91279e239b21274ac6d91b55002eb9c418824aab70cd66a82954a09a298a2", size = 1929575 },
 ]
