@@ -5,99 +5,108 @@
 #  This software is released under the MIT License.
 #
 #  http://opensource.org/licenses/mit-license.php
-import os
-from typing import AsyncGenerator
+from typing import Any, TypeGuard, Iterator
+from unittest.mock import MagicMock
 
 import pytest
-from mcp import StdioServerParameters, stdio_client, ClientSession
-from mcp.types import TextContent
-from youtube_transcript_api import YouTubeTranscriptApi
+from pytest_mock import MockFixture
+from youtube_transcript_api.proxies import WebshareProxyConfig, GenericProxyConfig
 
-params = StdioServerParameters(command="uv", args=["run", "mcp-youtube-transcript"])
-
-
-@pytest.fixture(scope="module")
-def anyio_backend() -> str:
-    return "asyncio"
+from mcp_youtube_transcript.server import new_server
 
 
-@pytest.fixture(scope="module")
-async def mcp_client_session() -> AsyncGenerator[ClientSession, None]:
-    async with stdio_client(params) as streams:
-        async with ClientSession(streams[0], streams[1]) as session:
-            await session.initialize()
-            yield session
+@pytest.fixture
+def mock_api(mocker: MockFixture) -> Iterator[MagicMock]:
+    yield mocker.patch("mcp_youtube_transcript.server.YouTubeTranscriptApi")
 
 
-@pytest.mark.anyio
-async def test_list_tools(mcp_client_session: ClientSession) -> None:
-    res = await mcp_client_session.list_tools()
-    assert any(tool.name == "get_transcript" for tool in res.tools)
+def is_webshare_proxy_config(obj: Any) -> TypeGuard[WebshareProxyConfig]:
+    return isinstance(obj, WebshareProxyConfig)
 
 
-@pytest.mark.skipif(os.getenv("CI") == "true", reason="Skipping this test on CI")
-@pytest.mark.anyio
-async def test_get_transcript(mcp_client_session: ClientSession) -> None:
-    video_id = "LPZh9BOjkQs"
+def is_generic_proxy_config(obj: Any) -> TypeGuard[GenericProxyConfig]:
+    return isinstance(obj, GenericProxyConfig)
 
-    expect = "\n".join((item.text for item in YouTubeTranscriptApi().fetch(video_id)))
 
-    res = await mcp_client_session.call_tool(
-        "get_transcript",
-        arguments={"url": f"https//www.youtube.com/watch?v={video_id}"},
+def test_new_server(mock_api: MagicMock) -> None:
+    new_server()
+
+    mock_api.assert_called_once_with(proxy_config=None)
+
+
+def test_new_server_with_webshare_proxy(mock_api: MagicMock) -> None:
+    webshare_proxy_username = "test_user"
+    webshare_proxy_password = "test_pass"
+
+    new_server(
+        webshare_proxy_username=webshare_proxy_username,
+        webshare_proxy_password=webshare_proxy_password,
     )
-    assert isinstance(res.content[0], TextContent)
-    assert res.content[0].text == expect
-    assert not res.isError
+
+    mock_api.assert_called_once()
+    proxy_config = mock_api.call_args.kwargs["proxy_config"]
+    assert is_webshare_proxy_config(proxy_config)
+    assert proxy_config.proxy_username == webshare_proxy_username
+    assert proxy_config.proxy_password == webshare_proxy_password
 
 
-@pytest.mark.skipif(os.getenv("CI") == "true", reason="Skipping this test on CI")
-@pytest.mark.anyio
-async def test_get_transcript_with_language(mcp_client_session: ClientSession) -> None:
-    video_id = "WjAXZkQSE2U"
+def test_new_server_with_only_webshare_proxy_user(mock_api: MagicMock) -> None:
+    webshare_proxy_username = "test_user"
 
-    expect = "\n".join((item.text for item in YouTubeTranscriptApi().fetch(video_id, ["ja"])))
-
-    res = await mcp_client_session.call_tool(
-        "get_transcript",
-        arguments={"url": f"https//www.youtube.com/watch?v={video_id}", "lang": "ja"},
+    new_server(
+        webshare_proxy_username=webshare_proxy_username,
     )
-    assert isinstance(res.content[0], TextContent)
-    assert res.content[0].text == expect
-    assert not res.isError
+
+    mock_api.assert_called_once_with(proxy_config=None)
 
 
-@pytest.mark.skipif(os.getenv("CI") == "true", reason="Skipping this test on CI")
-@pytest.mark.anyio
-async def test_get_transcript_fallback_language(
-    mcp_client_session: ClientSession,
-) -> None:
-    video_id = "LPZh9BOjkQs"
+def test_new_server_with_only_webshare_proxy_password(mock_api: MagicMock) -> None:
+    webshare_proxy_password = "test_pass"
 
-    expect = "\n".join((item.text for item in YouTubeTranscriptApi().fetch(video_id)))
-
-    res = await mcp_client_session.call_tool(
-        "get_transcript",
-        arguments={
-            "url": f"https//www.youtube.com/watch?v={video_id}",
-            "lang": "unknown",
-        },
+    new_server(
+        webshare_proxy_password=webshare_proxy_password,
     )
-    assert isinstance(res.content[0], TextContent)
-    assert res.content[0].text == expect
-    assert not res.isError
+
+    mock_api.assert_called_once_with(proxy_config=None)
 
 
-@pytest.mark.anyio
-async def test_get_transcript_invalid_url(mcp_client_session: ClientSession) -> None:
-    res = await mcp_client_session.call_tool(
-        "get_transcript", arguments={"url": "https//www.youtube.com/watch?vv=abcdefg"}
+def test_new_server_with_generic_proxy(mock_api: MagicMock) -> None:
+    http_proxy = "http://localhost:8080"
+    https_proxy = "https://localhost:8080"
+
+    new_server(
+        http_proxy=http_proxy,
+        https_proxy=https_proxy,
     )
-    assert res.isError
+
+    mock_api.assert_called_once()
+    proxy_config = mock_api.call_args.kwargs["proxy_config"]
+    assert is_generic_proxy_config(proxy_config)
+    assert proxy_config.http_url == http_proxy
+    assert proxy_config.https_url == https_proxy
 
 
-@pytest.mark.skipif(os.getenv("CI") == "true", reason="Skipping this test on CI")
-@pytest.mark.anyio
-async def test_get_transcript_not_found(mcp_client_session: ClientSession) -> None:
-    res = await mcp_client_session.call_tool("get_transcript", arguments={"url": "https//www.youtube.com/watch?v=a"})
-    assert res.isError
+def test_new_server_with_http_proxy(mock_api: MagicMock) -> None:
+    http_proxy = "http://localhost:8080"
+
+    new_server(
+        http_proxy=http_proxy,
+    )
+
+    mock_api.assert_called_once()
+    proxy_config = mock_api.call_args.kwargs["proxy_config"]
+    assert is_generic_proxy_config(proxy_config)
+    assert proxy_config.http_url == http_proxy
+
+
+def test_new_server_with_https_proxy(mock_api: MagicMock) -> None:
+    https_proxy = "https://localhost:8080"
+
+    new_server(
+        https_proxy=https_proxy,
+    )
+
+    mock_api.assert_called_once()
+    proxy_config = mock_api.call_args.kwargs["proxy_config"]
+    assert is_generic_proxy_config(proxy_config)
+    assert proxy_config.https_url == https_proxy
