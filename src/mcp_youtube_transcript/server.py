@@ -39,11 +39,14 @@ def new_server(
     ) -> str:
         """Retrieves the transcript of a YouTube video."""
         parsed_url = urlparse(url)
-        query_params = parse_qs(parsed_url.query)
 
-        video_id = query_params.get("v", [None])[0]
-        if video_id is None:
-            raise ValueError(f"couldn't find a video ID from the provided URL: {url}.")
+        if parsed_url.hostname == "youtu.be":
+            video_id = parsed_url.path.lstrip("/")
+        else:
+            q = parse_qs(parsed_url.query).get("v")
+            if q is None:
+                raise ValueError(f"couldn't find a video ID from the provided URL: {url}.")
+            video_id = q[0]
 
         if lang == "en":
             languages = ["en"]
