@@ -101,3 +101,19 @@ async def test_get_transcript_invalid_url(mcp_client_session: ClientSession) -> 
 async def test_get_transcript_not_found(mcp_client_session: ClientSession) -> None:
     res = await mcp_client_session.call_tool("get_transcript", arguments={"url": "https//www.youtube.com/watch?v=a"})
     assert res.isError
+
+
+@pytest.mark.skipif(os.getenv("CI") == "true", reason="Skipping this test on CI")
+@pytest.mark.anyio
+async def test_get_transcript_with_short_url(mcp_client_session: ClientSession) -> None:
+    video_id = "LPZh9BOjkQs"
+
+    expect = "\n".join((item.text for item in YouTubeTranscriptApi().fetch(video_id)))
+
+    res = await mcp_client_session.call_tool(
+        "get_transcript",
+        arguments={"url": f"https://youtu.be/{video_id}"},
+    )
+    assert isinstance(res.content[0], TextContent)
+    assert res.content[0].text == expect
+    assert not res.isError
