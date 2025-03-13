@@ -297,7 +297,7 @@ wheels = [
 
 [[package]]
 name = "mcp-youtube-transcript"
-version = "0.1.1"
+version = "0.2.0"
 source = { editable = "." }
 dependencies = [
     { name = "click" },
@@ -329,7 +329,7 @@ dev = [
     { name = "pre-commit", specifier = ">=4.1" },
     { name = "pre-commit-uv", specifier = ">=4.1.4" },
     { name = "pytest", specifier = ">=8.3.5" },
-    { name = "pytest-mock", specifier = ">=3.14.0" },
+    { name = "pytest-mock", specifier = ">=3.14" },
 ]
 
 [[package]]
