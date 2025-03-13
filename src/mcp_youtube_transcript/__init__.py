@@ -15,15 +15,26 @@ from mcp.server import FastMCP
 from mcp.server.fastmcp.utilities import logging
 from pydantic import Field
 from youtube_transcript_api import YouTubeTranscriptApi
+from youtube_transcript_api.proxies import WebshareProxyConfig, GenericProxyConfig, ProxyConfig
 
-logger: Final[Logger] = logging.get_logger(__name__)
 
-
-def server() -> FastMCP:
+def server(
+    webshare_proxy_username: str | None,
+    webshare_proxy_password: str | None,
+    http_proxy: str | None,
+    https_proxy: str | None,
+) -> FastMCP:
     """Initializes the MCP server."""
 
+    proxy_config: ProxyConfig | None = None
+    if webshare_proxy_username and webshare_proxy_password:
+        proxy_config = WebshareProxyConfig(webshare_proxy_username, webshare_proxy_password)
+    elif http_proxy or https_proxy:
+        proxy_config = GenericProxyConfig(http_proxy, https_proxy)
+
+    ytt_api = YouTubeTranscriptApi(proxy_config=proxy_config)
+
     mcp = FastMCP("Youtube Transcript")
-    ytt_api = YouTubeTranscriptApi()
 
     @mcp.tool()
     def get_transcript(
@@ -50,12 +61,33 @@ def server() -> FastMCP:
 
 
 @click.command()
+@click.option(
+    "--webshare-proxy-username",
+    metavar="NAME",
+    envvar="WEBSHARE_PROXY_USERNAME",
+    help="Webshare proxy service username.",
+)
+@click.option(
+    "--webshare-proxy-password",
+    metavar="PASSWORD",
+    envvar="WEBSHARE_PROXY_PASSWORD",
+    help="Webshare proxy service password.",
+)
+@click.option("--http-proxy", metavar="URL", envvar="HTTP_PROXY", help="HTTP proxy server URL.")
+@click.option("--https-proxy", metavar="URL", envvar="HTTPS_PROXY", help="HTTPS proxy server URL.")
 @click.version_option()
-def main() -> None:
+def main(
+    webshare_proxy_username: str | None,
+    webshare_proxy_password: str | None,
+    http_proxy: str | None,
+    https_proxy: str | None,
+) -> None:
     """YouTube Transcript MCP server."""
 
+    logger: Final[Logger] = logging.get_logger(__name__)
+
     logger.info("starting Youtube Transcript MCP server")
-    mcp = server()
+    mcp = server(webshare_proxy_username, webshare_proxy_password, http_proxy, https_proxy)
     mcp.run()
     logger.info("closed Youtube Transcript MCP server")
 
