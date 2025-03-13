@@ -1,4 +1,4 @@
-# Youtube Transcript MCP Server
+# YouTube Transcript MCP Server
 [![Python Application](https://github.com/jkawamoto/mcp-youtube-transcript/actions/workflows/python-app.yaml/badge.svg)](https://github.com/jkawamoto/mcp-youtube-transcript/actions/workflows/python-app.yaml)
 [![GitHub License](https://img.shields.io/github/license/jkawamoto/mcp-youtube-transcript)](https://github.com/jkawamoto/mcp-youtube-transcript/blob/main/LICENSE)
 [![pre-commit](https://img.shields.io/badge/pre--commit-enabled-brightgreen?logo=pre-commit)](https://github.com/pre-commit/pre-commit)
@@ -8,6 +8,16 @@
 This MCP server retrieves transcripts for given YouTube video URLs.
 
 <a href="https://glama.ai/mcp/servers/of3kwtmlqp"><img width="380" height="200" src="https://glama.ai/mcp/servers/of3kwtmlqp/badge" alt="YouTube Transcript Server MCP server" /></a>
+
+## Tools
+This MCP server provides the following tools:
+
+### `get_transcript`
+Fetches the transcript of a specified YouTube video.
+
+#### Parameters
+- **url** *(string)*: The full URL of the YouTube video. This field is required.
+- **lang** *(string, optional)*: The desired language for the transcript. Defaults to `en` if not specified.
 
 ## Installation
 
@@ -60,22 +70,25 @@ After editing, restart the application.
 For more information,
 see: [For Claude Desktop Users - Model Context Protocol](https://modelcontextprotocol.io/quickstart/user).
 
-### Installing via Smithery
+#### Installing via Smithery
 To install Youtube Transcript for Claude Desktop automatically via [Smithery](https://smithery.ai/server/@jkawamoto/mcp-youtube-transcript):
 
 ```bash
 npx -y @smithery/cli install @jkawamoto/mcp-youtube-transcript --client claude
 ```
 
-## Tools
-This MCP server provides the following tools:
+## Using Proxy Servers
+In environments where access to YouTube is restricted, you can use proxy servers.
 
-### `get_transcript`
-Fetches the transcript of a specified YouTube video.
+When using [Webshare](https://www.webshare.io/), set the username and password for the Residential Proxy using either
+the environment variables `WEBSHARE_PROXY_USERNAME` and `WEBSHARE_PROXY_PASSWORD`,
+or the command line arguments `--webshare-proxy-username` and `--webshare-proxy-password`.
 
-#### Parameters
-- **url** *(string)*: The full URL of the YouTube video. This field is required.
-- **lang** *(string, optional)*: The desired language for the transcript. Defaults to `en` if not specified.
+When using other proxy servers, set the proxy server URL using either the environment variables `HTTP_PROXY` or
+`HTTPS_PROXY`, or the command line arguments `--http-proxy` or `--https-proxy`.
+
+For more details, please visit:
+[Working around IP bans - YouTube Transcript API](https://github.com/jdepoix/youtube-transcript-api?tab=readme-ov-file#working-around-ip-bans-requestblocked-or-ipblocked-exception).
 
 ## License
 
