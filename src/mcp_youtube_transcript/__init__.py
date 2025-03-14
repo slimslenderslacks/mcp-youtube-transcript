@@ -5,12 +5,10 @@
 #  This software is released under the MIT License.
 #
 #  http://opensource.org/licenses/mit-license.php
-
-from logging import Logger
+import logging
 from typing import Final
 
 import click
-from mcp.server.fastmcp.utilities import logging
 
 from mcp_youtube_transcript.server import new_server
 
@@ -39,7 +37,8 @@ def main(
 ) -> None:
     """YouTube Transcript MCP server."""
 
-    logger: Final[Logger] = logging.get_logger(__name__)
+    logging.basicConfig(level=logging.INFO)
+    logger = logging.getLogger(__name__)
 
     logger.info("starting Youtube Transcript MCP server")
     mcp = new_server(webshare_proxy_username, webshare_proxy_password, http_proxy, https_proxy)
