@@ -8,6 +8,8 @@
 
 from urllib.parse import urlparse, parse_qs
 
+import requests
+from bs4 import BeautifulSoup
 from mcp.server import FastMCP
 from pydantic import Field
 from youtube_transcript_api import YouTubeTranscriptApi
@@ -52,8 +54,16 @@ def new_server(
             languages = ["en"]
         else:
             languages = [lang, "en"]
+
+        page = requests.get(
+            f"https://www.youtube.com/watch?v={video_id}", headers={"Accept-Language": ",".join(languages)}
+        )
+        page.raise_for_status()
+        soup = BeautifulSoup(page.text, "html.parser")
+        title = soup.title.string if soup.title else ""
+
         transcripts = ytt_api.fetch(video_id, languages=languages)
 
-        return "\n".join((item.text for item in transcripts))
+        return f"# {title}\n" + "\n".join((item.text for item in transcripts))
 
     return mcp
