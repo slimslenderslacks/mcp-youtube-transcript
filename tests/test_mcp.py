@@ -9,11 +9,19 @@ import os
 from typing import AsyncGenerator
 
 import pytest
+import requests
+from bs4 import BeautifulSoup
 from mcp import StdioServerParameters, stdio_client, ClientSession
 from mcp.types import TextContent
 from youtube_transcript_api import YouTubeTranscriptApi
 
 params = StdioServerParameters(command="uv", args=["run", "mcp-youtube-transcript"])
+
+
+def fetch_title(url: str, lang: str) -> str:
+    res = requests.get(f"https://www.youtube.com/watch?v={url}", headers={"Accept-Language": lang})
+    soup = BeautifulSoup(res.text, "html.parser")
+    return soup.title.string or "" if soup.title else ""
 
 
 @pytest.fixture(scope="module")
@@ -40,7 +48,8 @@ async def test_list_tools(mcp_client_session: ClientSession) -> None:
 async def test_get_transcript(mcp_client_session: ClientSession) -> None:
     video_id = "LPZh9BOjkQs"
 
-    expect = "\n".join((item.text for item in YouTubeTranscriptApi().fetch(video_id)))
+    title = fetch_title(video_id, "en")
+    expect = f"# {title}\n" + "\n".join((item.text for item in YouTubeTranscriptApi().fetch(video_id)))
 
     res = await mcp_client_session.call_tool(
         "get_transcript",
@@ -56,7 +65,8 @@ async def test_get_transcript(mcp_client_session: ClientSession) -> None:
 async def test_get_transcript_with_language(mcp_client_session: ClientSession) -> None:
     video_id = "WjAXZkQSE2U"
 
-    expect = "\n".join((item.text for item in YouTubeTranscriptApi().fetch(video_id, ["ja"])))
+    title = fetch_title(video_id, "ja")
+    expect = f"# {title}\n" + "\n".join((item.text for item in YouTubeTranscriptApi().fetch(video_id, ["ja"])))
 
     res = await mcp_client_session.call_tool(
         "get_transcript",
@@ -74,7 +84,8 @@ async def test_get_transcript_fallback_language(
 ) -> None:
     video_id = "LPZh9BOjkQs"
 
-    expect = "\n".join((item.text for item in YouTubeTranscriptApi().fetch(video_id)))
+    title = fetch_title(video_id, "en")
+    expect = f"# {title}\n" + "\n".join((item.text for item in YouTubeTranscriptApi().fetch(video_id)))
 
     res = await mcp_client_session.call_tool(
         "get_transcript",
@@ -108,7 +119,8 @@ async def test_get_transcript_not_found(mcp_client_session: ClientSession) -> No
 async def test_get_transcript_with_short_url(mcp_client_session: ClientSession) -> None:
     video_id = "LPZh9BOjkQs"
 
-    expect = "\n".join((item.text for item in YouTubeTranscriptApi().fetch(video_id)))
+    title = fetch_title(video_id, "en")
+    expect = f"# {title}\n" + "\n".join((item.text for item in YouTubeTranscriptApi().fetch(video_id)))
 
     res = await mcp_client_session.call_tool(
         "get_transcript",
