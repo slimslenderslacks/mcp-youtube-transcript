@@ -5,7 +5,7 @@
 #  This software is released under the MIT License.
 #
 #  http://opensource.org/licenses/mit-license.php
-
+from functools import lru_cache
 from urllib.parse import urlparse, parse_qs
 
 import requests
@@ -32,6 +32,24 @@ def new_server(
 
     ytt_api = YouTubeTranscriptApi(proxy_config=proxy_config)
 
+    @lru_cache
+    def _get_transcript(video_id: str, lang: str) -> str:
+        if lang == "en":
+            languages = ["en"]
+        else:
+            languages = [lang, "en"]
+
+        page = requests.get(
+            f"https://www.youtube.com/watch?v={video_id}", headers={"Accept-Language": ",".join(languages)}
+        )
+        page.raise_for_status()
+        soup = BeautifulSoup(page.text, "html.parser")
+        title = soup.title.string if soup.title else "Transcript"
+
+        transcripts = ytt_api.fetch(video_id, languages=languages)
+
+        return f"# {title}\n" + "\n".join((item.text for item in transcripts))
+
     mcp = FastMCP("Youtube Transcript")
 
     @mcp.tool()
@@ -50,20 +68,6 @@ def new_server(
                 raise ValueError(f"couldn't find a video ID from the provided URL: {url}.")
             video_id = q[0]
 
-        if lang == "en":
-            languages = ["en"]
-        else:
-            languages = [lang, "en"]
-
-        page = requests.get(
-            f"https://www.youtube.com/watch?v={video_id}", headers={"Accept-Language": ",".join(languages)}
-        )
-        page.raise_for_status()
-        soup = BeautifulSoup(page.text, "html.parser")
-        title = soup.title.string if soup.title else ""
-
-        transcripts = ytt_api.fetch(video_id, languages=languages)
-
-        return f"# {title}\n" + "\n".join((item.text for item in transcripts))
+        return _get_transcript(video_id, lang)
 
     return mcp
