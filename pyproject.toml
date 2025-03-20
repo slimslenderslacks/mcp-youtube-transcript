@@ -27,7 +27,7 @@ dependencies = [
     "mcp>=1.4.1",
     "pydantic>=2.10.6",
     "requests>=2.32.3",
-    "youtube-transcript-api>=1.0.1",
+    "youtube-transcript-api>=1.0.2",
 ]
 
 scripts.mcp-youtube-transcript = "mcp_youtube_transcript:main"
