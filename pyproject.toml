@@ -27,6 +27,7 @@ dependencies = [
     "mcp>=1.5",
     "pydantic>=2.10.6",
     "requests>=2.32.3",
+    "rich-click>=1.8.8",
     "youtube-transcript-api>=1.0.3",
 ]
 

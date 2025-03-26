@@ -8,7 +8,7 @@
 import logging
 from typing import Final
 
-import click
+import rich_click as click
 
 from mcp_youtube_transcript.server import new_server
 

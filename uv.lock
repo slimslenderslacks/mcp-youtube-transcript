@@ -318,6 +318,7 @@ dependencies = [
     { name = "mcp" },
     { name = "pydantic" },
     { name = "requests" },
+    { name = "rich-click" },
     { name = "youtube-transcript-api" },
 ]
 
@@ -338,6 +339,7 @@ requires-dist = [
     { name = "mcp", specifier = ">=1.5" },
     { name = "pydantic", specifier = ">=2.10.6" },
     { name = "requests", specifier = ">=2.32.3" },
+    { name = "rich-click", specifier = ">=1.8.8" },
     { name = "youtube-transcript-api", specifier = ">=1.0.3" },
 ]
 
