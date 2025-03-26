@@ -25,11 +25,6 @@ def fetch_title(url: str, lang: str) -> str:
 
 
 @pytest.fixture(scope="module")
-def anyio_backend() -> str:
-    return "asyncio"
-
-
-@pytest.fixture(scope="module")
 async def mcp_client_session() -> AsyncGenerator[ClientSession, None]:
     async with stdio_client(params) as streams:
         async with ClientSession(streams[0], streams[1]) as session:
